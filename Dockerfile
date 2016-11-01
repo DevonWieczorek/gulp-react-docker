@@ -11,11 +11,12 @@ RUN chown -R app:app $HOME/*
 
 USER app
 WORKDIR $HOME/gulp-react/
-RUN yarn install && yarn cache clean
+RUN yarn && yarn cache clean
 
 USER root
 COPY . $HOME/gulp-react/
 RUN chown -R app:app $HOME/*
 
 USER app
-CMD ["gulp"]
+CMD gulp && gulp watch
+#CMD ["node", "./src/index.js"]

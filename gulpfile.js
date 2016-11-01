@@ -1,5 +1,60 @@
-const Gulp = require("gulp")
+const gulp = require("gulp")
+const babel = require("gulp-babel")
+const concat = require("gulp-concat")
+const connect = require("gulp-connect")
+const eslint = require("gulp-eslint")
+const newer = require("gulp-newer")
+const notify = require("gulp-notify")
+const plumber = require("gulp-plumber")
+const sourcemaps = require("gulp-sourcemaps")
+const Configs = require("./gulpconfigs.js")
 
-Gulp.task("default", () => {
-	console.log("Ran gulp")
-}) 
+const P = {
+	"app": "./src",
+	"js": "./src/**/*.{js}",
+	"jsx": "./src/**/*.{jsx}",
+	"assets": "./src/assets",
+	"vendor": "./src/assets/vendor",
+}
+
+gulp.task("lint", () => {
+	return gulp.src([P.js, P.jsx])
+			.pipe(eslint(Configs.eslint))
+			.pipe(eslint.format())
+			.pipe(eslint.failAfterError())
+})
+
+gulp.task("copy-react", () => {
+	return gulp.src("./node_modules/react/dist/react.js")
+			.pipe(newer(P.vendor + "/react.js"))
+			.pipe(gulp.dest(P.vendor))
+})
+
+gulp.task("copy-react-dom", () => {
+	gulp.src("./node_modules/react-dom/dist/react-dom.js")
+		.pipe(newer(P.vendor + "/react-dom.js"))
+		.pipe(gulp.dest(P.vendor))
+})
+
+gulp.task("concat", ["lint", "copy-react", "copy-react-dom"], () => {
+	console.log("running concat...")
+	return gulp.src(P.vendor.concat([P.js, P.jsx]))
+			.pipe(sourcemaps.init())
+			.pipe(babel({
+				only: [P.jsx],
+				compact: false
+			}))
+			.pipe(concat(P.assets + "/app.js"))
+			.pipe(sourcemaps.write(P.app))
+			.pipe(gulp.dest(P.assets))
+})
+
+gulp.task("watch", () => {
+	console.log("now watching...")
+	gulp.watch(P.js, ["concat"])
+	gulp.watch(P.jsx, ["concat"])
+})
+
+gulp.task("default", ["concat"], () => {
+	console.log("Ran default job...")
+});
