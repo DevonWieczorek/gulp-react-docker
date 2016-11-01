@@ -1,0 +1,1 @@
+This is a test project to find a way to keep an entire workflow to a docker container to avoid convoluting the local machine. Gulpfile setup is mainly based on https://jonsuh.com/blog/integrating-react-with-gulp/
