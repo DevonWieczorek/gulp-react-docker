@@ -45,10 +45,11 @@ gulp.task("concat", ["lint", "copy-react", "copy-react-dom"], () => {
 	return gulp.src(P.allJs)
 			.pipe(sourcemaps.init())
 			.pipe(babel({
-				only: [P.jsx],
+				presets: ["react"],
+				only: P.jsx,
 				compact: false
 			}))
-			.pipe(concat(P.assets + "/app.js"))
+			.pipe(concat("app.js"))
 			.pipe(sourcemaps.write(P.app))
 			.pipe(gulp.dest(P.assets))
 })

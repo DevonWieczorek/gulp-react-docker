@@ -10,6 +10,7 @@
   "license": "ISC",
   "devDependencies": {},
   "dependencies": {
+    "babel-preset-react": "^6.16.0",
     "eslint-plugin-react": "^6.5.0",
     "eslint-plugin-requirejs": "^3.0.0",
     "gulp": "^3.9.1",
