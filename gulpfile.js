@@ -10,14 +10,16 @@ const P = {
 	"app": "./src",
 	"allJs": "./src/**/*.{js,jsx}",
 	"jsx": "./src/**/*.jsx",
+	"html": "./src/**/*.{htm,html}",
 	"assets": "./src/assets",
 	"vendor": "./src/assets/vendor",
+	"ignore": "!./src/assets/**/*.*",
 }
 
 gulp.task("lint", () => {
 	return gulp.src([
 				P.allJs,
-				"!./src/assets/**/*.js"
+				P.ignore
 			])
 			.pipe(eslint())
 			.pipe(eslint.format())
@@ -37,7 +39,6 @@ gulp.task("copy-react-dom", () => {
 })
 
 gulp.task("concat", ["lint", "copy-react", "copy-react-dom"], () => {
-	console.log("running concat...")
 	return gulp.src(P.allJs)
 			.pipe(sourcemaps.init())
 			.pipe(babel({
@@ -50,10 +51,24 @@ gulp.task("concat", ["lint", "copy-react", "copy-react-dom"], () => {
 			.pipe(gulp.dest(P.assets))
 })
 
-gulp.task("watch", () => {
-	console.log("now watching...")
-	gulp.watch(P.allJs, ["concat"])
+gulp.task("connect", ["concat"], () => {
+	connect.server({
+		"root": "./src",
+		"livereload": true,
+		"port": 1234
+	})
 })
+
+gulp.task("livereload", () => {
+	gulp.src([P.allJs, P.html, P.ignore])
+		.pipe(connect.reload())
+})
+
+gulp.task("watch", () => {
+	gulp.watch([P.allJs, P.html, P.ignore], ["concat", "livereload"])
+})
+
+gulp.task("dev", ["connect", "watch"])
 
 gulp.task("default", ["concat"], () => {
 	console.log("Ran default job...")
