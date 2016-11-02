@@ -4,11 +4,7 @@ const concat = require("gulp-concat")
 const connect = require("gulp-connect")
 const eslint = require("gulp-eslint")
 const newer = require("gulp-newer")
-const notify = require("gulp-notify")
-const plumber = require("gulp-plumber")
 const sourcemaps = require("gulp-sourcemaps")
-
-const Configs = require("./gulpconfigs.js")
 
 const P = {
 	"app": "./src",
