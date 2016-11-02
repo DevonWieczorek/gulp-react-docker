@@ -8,12 +8,5 @@ module.exports = {
 
 			this.emit("end")
 		}
-	},
-	"eslint": {
-		"baseConfig": {
-			"ecmaFeatures": {
-				"jsx": true
-			}
-		}
 	}
 }

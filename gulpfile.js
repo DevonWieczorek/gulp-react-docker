@@ -7,19 +7,23 @@ const newer = require("gulp-newer")
 const notify = require("gulp-notify")
 const plumber = require("gulp-plumber")
 const sourcemaps = require("gulp-sourcemaps")
+
 const Configs = require("./gulpconfigs.js")
 
 const P = {
 	"app": "./src",
-	"js": "./src/**/*.{js}",
-	"jsx": "./src/**/*.{jsx}",
+	"allJs": "./src/**/*.{js,jsx}",
+	"jsx": "./src/**/*.jsx",
 	"assets": "./src/assets",
 	"vendor": "./src/assets/vendor",
 }
 
 gulp.task("lint", () => {
-	return gulp.src([P.js, P.jsx])
-			.pipe(eslint(Configs.eslint))
+	return gulp.src([
+				P.allJs,
+				"!./src/assets/**/*.js"
+			])
+			.pipe(eslint())
 			.pipe(eslint.format())
 			.pipe(eslint.failAfterError())
 })
@@ -38,7 +42,7 @@ gulp.task("copy-react-dom", () => {
 
 gulp.task("concat", ["lint", "copy-react", "copy-react-dom"], () => {
 	console.log("running concat...")
-	return gulp.src(P.vendor.concat([P.js, P.jsx]))
+	return gulp.src(P.allJs)
 			.pipe(sourcemaps.init())
 			.pipe(babel({
 				only: [P.jsx],
@@ -51,8 +55,7 @@ gulp.task("concat", ["lint", "copy-react", "copy-react-dom"], () => {
 
 gulp.task("watch", () => {
 	console.log("now watching...")
-	gulp.watch(P.js, ["concat"])
-	gulp.watch(P.jsx, ["concat"])
+	gulp.watch(P.allJs, ["concat"])
 })
 
 gulp.task("default", ["concat"], () => {

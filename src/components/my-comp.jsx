@@ -1,6 +1,7 @@
-const react = require("react")
+var React = require("react")
 
-module.exports = react.createClass({
+module.exports = React.createClass({
+	displayName: "Hello-world",
 	render: function () {
 		return (
 			<div>

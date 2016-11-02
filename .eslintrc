@@ -1,0 +1,21 @@
+{
+	"plugins": [
+		"react",
+		"requirejs"
+	],
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:requirejs/recommended"
+	],
+	"ecmaFeatures": {
+		"jsx": true
+	},
+	"globals": {
+		"module": false,
+		"console": false
+	},
+	"rules": {
+		"no-console": 0
+	}
+}
