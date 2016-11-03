@@ -1,21 +1,30 @@
 {
+	"parserOptions": {
+		"sourceType": "module",
+	},
 	"plugins": [
 		"react",
-		"requirejs"
 	],
 	"extends": [
+		"es2015",
 		"eslint:recommended",
 		"plugin:react/recommended",
-		"plugin:requirejs/recommended"
 	],
 	"ecmaFeatures": {
-		"jsx": true
+		"jsx": true,
+        "modules": true,
 	},
 	"globals": {
 		"module": false,
-		"console": false
+		"console": false,
+		"document": false,
 	},
 	"rules": {
-		"no-console": 0
-	}
+		"no-console": 0,
+	},
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true,
+    },
 }

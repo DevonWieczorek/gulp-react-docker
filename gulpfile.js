@@ -1,9 +1,9 @@
-const gulp = require("gulp")
-const babel = require("gulp-babel")
-const concat = require("gulp-concat")
+const babelify = require("babelify")
+const browserify = require("browserify")
 const connect = require("gulp-connect")
 const eslint = require("gulp-eslint")
-const newer = require("gulp-newer")
+const gulp = require("gulp")
+const source = require("vinyl-source-stream")
 const sourcemaps = require("gulp-sourcemaps")
 
 const P = {
@@ -26,35 +26,24 @@ gulp.task("lint", () => {
 			.pipe(eslint.failAfterError())
 })
 
-gulp.task("copy-react", () => {
-	return gulp.src("./node_modules/react/dist/react.js")
-			.pipe(newer(P.vendor + "/react.js"))
-			.pipe(gulp.dest(P.vendor))
+gulp.task("build", ["lint"], () => {
+	browserify({
+		entries: "./src/index.jsx",
+		extensions: [".jsx", ".js"],
+		debug: true
+	})
+	.transform(babelify)
+	.bundle()
+	.pipe(source("bundle.js"))
+	.pipe(gulp.dest(P.assets));
 })
 
-gulp.task("copy-react-dom", () => {
-	gulp.src("./node_modules/react-dom/dist/react-dom.js")
-		.pipe(newer(P.vendor + "/react-dom.js"))
-		.pipe(gulp.dest(P.vendor))
-})
-
-gulp.task("concat", ["lint", "copy-react", "copy-react-dom"], () => {
-	return gulp.src(P.allJs)
-			.pipe(sourcemaps.init())
-			.pipe(babel({
-				presets: ["react"],
-				only: P.jsx,
-				compact: false
-			}))
-			.pipe(concat("app.js"))
-			.pipe(sourcemaps.write(P.app))
-			.pipe(gulp.dest(P.assets))
-})
-
-gulp.task("connect", ["concat"], () => {
+gulp.task("connect", ["build"], () => {
 	connect.server({
 		"root": "./src",
-		"livereload": true,
+		"livereload": {
+			"port": 2345
+		},
 		"port": 1234
 	})
 })
@@ -65,11 +54,11 @@ gulp.task("livereload", () => {
 })
 
 gulp.task("watch", () => {
-	gulp.watch([P.allJs, P.html, P.ignore], ["concat", "livereload"])
+	gulp.watch([P.allJs, P.html, P.ignore], ["build", "livereload"])
 })
 
 gulp.task("dev", ["connect", "watch"])
 
-gulp.task("default", ["concat"], () => {
+gulp.task("default", ["build"], () => {
 	console.log("Ran default job...")
 });

@@ -18,4 +18,4 @@ COPY . $HOME/gulp-react/
 RUN chown -R app:app $HOME/*
 
 USER app
-CMD ["node", "./src/index.js"]
+CMD ["node", "./index.js"]
