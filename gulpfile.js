@@ -44,7 +44,8 @@ gulp.task("connect", ["build"], () => {
 		"livereload": {
 			"port": 2345
 		},
-		"port": 1234
+		"port": 1234,
+		"host": "0.0.0.0"
 	})
 })
 
