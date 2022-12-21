@@ -1,11 +1,12 @@
-gulp-react:
-  build: .
-  command: gulp dev
-  environment:
-    NODE_ENV: development
-  ports:
-    - '1234:1234'
-    - '2345:2345'
-  volumes:
-    - .:/home/app/gulp-react
-    - /home/app/gulp-react/node_modules
+services:
+  gulp-react:
+    build: .
+    command: gulp dev
+    environment:
+      NODE_ENV: development
+    ports:
+      - '1234:1234'
+      - '2345:2345'
+    volumes:
+      - .:/home/app/gulp-react
+      - /home/app/gulp-react/node_modules
