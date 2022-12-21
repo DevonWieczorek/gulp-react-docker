@@ -1,10 +1,13 @@
 {
-  "name": "gulp-react",
+  "name": "gulp-react-docker",
   "version": "1.0.0",
   "description": "Test application for gulp and react in a docker env",
   "main": "./index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-docker": "docker-compose build && docker-compose up -d",
+    "kill-docker": "docker kill $(docker ps -q)"
   },
   "author": "",
   "license": "ISC",
