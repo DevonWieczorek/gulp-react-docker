@@ -17,5 +17,8 @@ USER root
 COPY . $HOME/gulp-react/
 RUN chown -R app:app $HOME/*
 
+EXPOSE 1234
+EXPOSE 2345
+
 USER app
 CMD ["node", "./index.js"]
